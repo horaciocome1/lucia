@@ -1,4 +1,4 @@
-package io.github.horaciocome1.lucia.setup
+package io.github.horaciocome1.lucia.setup.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,15 +26,18 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.horaciocome1.lucia.destinations.LevelScreenDestination
 import io.github.horaciocome1.lucia.ui.component.Seekbar
 import io.github.horaciocome1.lucia.ui.theme.BrightGreen
 import io.github.horaciocome1.lucia.ui.theme.Grey
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Destination
 @Composable
 fun DurationScreen(
-    modifier: Modifier = Modifier,
+    navigator: DestinationsNavigator?,
     minimumDuration: Long = 60L,
     maximumDuration: Long = 240L,
     position: Long = 90L
@@ -43,16 +45,16 @@ fun DurationScreen(
     val seekbarMaximum = remember { mutableStateOf(maximumDuration - minimumDuration) }
     val seekbarPosition = remember { mutableStateOf(position - minimumDuration) }
     val contentWidth = 300.dp
-    SetupScreen(
-        modifier = modifier,
+    SetupScaffold(
         title = "Pick duration",
         actionButtonText = "continue",
         firstStep = true,
-        stepComplete = true
+        stepComplete = true,
+        onNavigateUpClick = { navigator?.navigateUp() },
+        onContinueButtonClick = { navigator?.navigate(LevelScreenDestination()) }
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -71,10 +73,7 @@ fun DurationScreen(
                 style = MaterialTheme.typography.displayLarge,
                 textAlign = TextAlign.Center
             )
-            Spacer(
-                modifier = Modifier
-                    .widthIn(contentWidth)
-            )
+            Spacer(modifier = Modifier.widthIn(contentWidth))
             RegionSeekBar(
                 max = seekbarMaximum,
                 currentProgress = seekbarPosition,
@@ -94,10 +93,7 @@ fun RegionSeekBar(
     labelMaximum: String,
     width: Dp = 300.dp
 ) {
-    Column(
-        modifier = Modifier
-            .width(300.dp)
-    ) {
+    Column(modifier = Modifier.width(width)) {
         Seekbar(
             modifier = Modifier,
             duration = max,
@@ -134,10 +130,7 @@ fun RegionSeekBar(
 @Composable
 fun DurationScreenPreview() {
     LuciaTheme {
-        DurationScreen(
-            modifier = Modifier
-                .fillMaxSize()
-        )
+        DurationScreen(navigator = null)
     }
 }
 

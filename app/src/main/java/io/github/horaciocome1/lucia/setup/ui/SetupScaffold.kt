@@ -1,4 +1,4 @@
-package io.github.horaciocome1.lucia.setup
+package io.github.horaciocome1.lucia.setup.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
@@ -29,12 +30,14 @@ import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SetupScreen(
+fun SetupScaffold(
     modifier: Modifier = Modifier,
     title: String,
     actionButtonText: String,
     firstStep: Boolean,
     stepComplete: Boolean,
+    onNavigateUpClick: () -> Unit,
+    onContinueButtonClick: () -> Unit,
     content: @Composable BoxScope.() -> Unit
 ) {
     Scaffold(
@@ -45,10 +48,10 @@ fun SetupScreen(
                 navigationIcon = {
                     if (!firstStep) {
                         IconButton(
-                            onClick = {}
+                            onClick = onNavigateUpClick
                         ) {
                             Image(
-                                imageVector = Icons.Outlined.ArrowBack,
+                                imageVector = Icons.Outlined.ArrowBackIosNew,
                                 contentDescription = "Back"
                             )
                         }
@@ -57,7 +60,7 @@ fun SetupScreen(
                 actions = {
                     if (firstStep) {
                         IconButton(
-                            onClick = {}
+                            onClick = onNavigateUpClick
                         ) {
                             Image(
                                 imageVector = Icons.Outlined.Close,
@@ -70,7 +73,7 @@ fun SetupScreen(
         },
         bottomBar = {
             Button(
-                onClick = {},
+                onClick = onContinueButtonClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(80.dp),
@@ -94,11 +97,15 @@ fun SetupScreen(
             Text(
                 modifier = Modifier
                     .widthIn(contentWidth)
-                    .padding(top = 32.dp, start = 32.dp),
+                    .padding(top = 32.dp, start = 32.dp, end = 32.dp),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge
             )
-            Box(content = content)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+                content = content
+            )
         }
     }
 }
@@ -107,13 +114,14 @@ fun SetupScreen(
 @Composable
 fun PreviewSetupScreen() {
     LuciaTheme {
-        SetupScreen(
-            modifier = Modifier
-                .fillMaxSize(),
+        SetupScaffold(
+            modifier = Modifier.fillMaxSize(),
             firstStep = true,
             title = "Setup Screen Preview",
             actionButtonText = "Continue",
-            stepComplete = true
+            stepComplete = true,
+            onNavigateUpClick = {},
+            onContinueButtonClick = {}
         ) {
             Text("test")
         }

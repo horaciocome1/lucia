@@ -16,13 +16,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.horaciocome1.lucia.destinations.DurationScreenDestination
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
+@RootNavGraph(start = true)
+@Destination(start = true)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, userName: String = "Lucia") {
+fun HomeScreen(
+    navigator: DestinationsNavigator?,
+    userName: String = "Lucia"
+) {
     val title = buildAnnotatedString {
         withStyle(MaterialTheme.typography.headlineSmall.toSpanStyle()) {
             append("Welcome,")
@@ -30,7 +40,7 @@ fun HomeScreen(modifier: Modifier = Modifier, userName: String = "Lucia") {
         append("\n")
         append(userName)
     }
-    Surface(modifier) {
+    Surface {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceEvenly,
@@ -40,15 +50,19 @@ fun HomeScreen(modifier: Modifier = Modifier, userName: String = "Lucia") {
                 text = title,
                 style = MaterialTheme.typography.headlineLarge
             )
-            Spacer(Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(60.dp))
             Button(
-                onClick = {},
+                onClick = { navigator?.navigate(DurationScreenDestination()) },
                 modifier = Modifier
                     .widthIn(200.dp)
                     .heightIn(100.dp),
                 shape = CircleShape
             ) {
-                Text("CHALLENGE")
+                Text(
+                    text = "CHALLENGE",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.ExtraBold
+                )
             }
         }
     }
@@ -58,9 +72,6 @@ fun HomeScreen(modifier: Modifier = Modifier, userName: String = "Lucia") {
 @Composable
 fun HomeScreenPreview() {
     LuciaTheme {
-        HomeScreen(
-            modifier = Modifier
-                .fillMaxSize()
-        )
+        HomeScreen(navigator = null)
     }
 }

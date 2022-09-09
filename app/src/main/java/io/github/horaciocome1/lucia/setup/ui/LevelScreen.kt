@@ -1,18 +1,22 @@
-package io.github.horaciocome1.lucia.setup
+package io.github.horaciocome1.lucia.setup.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.horaciocome1.lucia.destinations.TopicsScreenDestination
+import io.github.horaciocome1.lucia.setup.model.Level
 import io.github.horaciocome1.lucia.ui.component.RadioRow
 import io.github.horaciocome1.lucia.ui.theme.Brown70
 import io.github.horaciocome1.lucia.ui.theme.Brown80
@@ -22,23 +26,27 @@ import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import io.github.horaciocome1.lucia.ui.theme.Yellow70
 import io.github.horaciocome1.lucia.ui.theme.Yellow80
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Destination
 @Composable
 fun LevelScreen(
-    modifier: Modifier = Modifier,
-    levels: Set<Level>
+    navigator: DestinationsNavigator?
 ) {
     val selectedLevel = remember { mutableStateOf<Level?>(null) }
-    SetupScreen(
-        modifier = modifier,
+    SetupScaffold(
         title = "Choose level",
         actionButtonText = "Continue",
         firstStep = false,
-        stepComplete = selectedLevel.value != null
+        stepComplete = selectedLevel.value != null,
+        onNavigateUpClick = { navigator?.navigateUp() },
+        onContinueButtonClick = {
+            val selected = selectedLevel.value
+            if (selected != null) {
+                navigator?.navigate(TopicsScreenDestination(level = selected))
+            }
+        }
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -47,8 +55,8 @@ fun LevelScreen(
                     modifier = Modifier
                         .width(300.dp)
                         .padding(vertical = 4.dp),
-                    backgroundColor = level.color,
-                    backgroundColorSelected = level.colorSelected,
+                    backgroundColor = Color(level.color),
+                    backgroundColorSelected = Color(level.colorSelected),
                     onClick = { selectedLevel.value = level },
                     selected = level.name == selectedLevel.value?.name,
                     text = level.name
@@ -62,27 +70,24 @@ fun LevelScreen(
 @Composable
 fun PreviewLevelScreen() {
     LuciaTheme {
-        LevelScreen(
-            modifier = Modifier,
-            levels = levels
-        )
+        LevelScreen(navigator = null)
     }
 }
 
 private val levels = setOf(
     Level(
         name = "Júnior",
-        color = Green70,
-        colorSelected = Green80
+        color = Green70.value,
+        colorSelected = Green80.value
     ),
     Level(
         name = "Soft",
-        color = Yellow70,
-        colorSelected = Yellow80
+        color = Yellow70.value,
+        colorSelected = Yellow80.value
     ),
     Level(
         name = "Madoda",
-        color = Brown70,
-        colorSelected = Brown80
+        color = Brown70.value,
+        colorSelected = Brown80.value
     )
 )
