@@ -21,8 +21,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.horaciocome1.lucia.destinations.HomeScreenDestination
 import io.github.horaciocome1.lucia.setup.model.Player
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import java.text.DateFormat
@@ -54,11 +55,16 @@ fun InviteScreen(
     val dateFormatter = DateFormat.getDateTimeInstance()
     Scaffold(
         topBar = {
-            SmallTopAppBar(
+            TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator?.navigateUp() }
+                        onClick = {
+                            navigator?.popBackStack(
+                                route = HomeScreenDestination.route,
+                                inclusive = false
+                            )
+                        }
                     ) {
                         Image(
                             imageVector = if (players.value.isEmpty()) {
@@ -66,7 +72,11 @@ fun InviteScreen(
                             } else {
                                 Icons.Outlined.Close
                             },
-                            contentDescription = if (players.value.isEmpty()) "Back" else "Close"
+                            contentDescription = if (players.value.isEmpty()) {
+                                "Back"
+                            } else {
+                                "Close"
+                            }
                         )
                     }
                 },
