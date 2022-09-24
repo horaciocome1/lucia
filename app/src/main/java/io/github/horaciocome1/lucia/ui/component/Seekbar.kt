@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,8 +29,8 @@ import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 @Composable
 fun Seekbar(
     modifier: Modifier = Modifier,
-    position: State<Long>,
-    duration: State<Long>,
+    position: Long,
+    duration: Long,
     onNewProgress: (progress: Long) -> Unit,
     onDragStart: (progress: Long) -> Unit = {},
     onDragEnd: (progress: Long) -> Unit = {},
@@ -63,12 +62,12 @@ fun Seekbar(
                         onDragStart = {
                             val p = it.x / (size.width - sliderWidthPx)
                             dragProgress.value = p
-                            val newPosition = (dragProgress.value * duration.value).toLong()
+                            val newPosition = (dragProgress.value * duration).toLong()
                             onDragStart(newPosition)
                             isDragging.value = true
                         },
                         onDragEnd = {
-                            val newPosition = (dragProgress.value * duration.value).toLong()
+                            val newPosition = (dragProgress.value * duration).toLong()
                             onDragEnd(newPosition)
                             isDragging.value = false
                         },
@@ -77,7 +76,7 @@ fun Seekbar(
                             // calculate progress from 0.0f to 1.0f
                             val newProgress = dragAmount.x / (size.width - sliderWidthPx)
                             dragProgress.value = (dragProgress.value + newProgress).roundTo1()
-                            val newPosition = (dragProgress.value * duration.value).toLong()
+                            val newPosition = (dragProgress.value * duration).toLong()
                             onNewProgress(newPosition)
                         }
                     )
@@ -86,7 +85,7 @@ fun Seekbar(
                     detectTapGestures {
                         val newProgress = it.x / (size.width - sliderWidthPx)
                         dragProgress.value = newProgress.roundTo1()
-                        val newPosition = (dragProgress.value * duration.value).toLong()
+                        val newPosition = (dragProgress.value * duration).toLong()
                         onNewProgress(newPosition)
                         onDragEnd(newPosition)
                     }
@@ -95,7 +94,7 @@ fun Seekbar(
             val canvasWidth = size.width
             val canvasHeight = size.height
 
-            val progressFloat = (position.value.toDouble() / duration.value.toDouble()).toFloat()
+            val progressFloat = (position.toDouble() / duration.toDouble()).toFloat()
             val offsetX = (canvasWidth - sliderSize.width) * progressFloat
 
             val p = if (isDragging.value) {
@@ -136,7 +135,7 @@ fun Seekbar(
     }
 }
 
-fun Float.roundTo1(): Float {
+private fun Float.roundTo1(): Float {
     return when (this) {
         in (0f..1f) -> this
         in (Float.NEGATIVE_INFINITY..0f) -> 0f
@@ -150,8 +149,8 @@ fun SeekBarPreview() {
     LuciaTheme {
         Seekbar(
             modifier = Modifier.fillMaxWidth(),
-            duration = remember { mutableStateOf(1000) },
-            position = remember { mutableStateOf(300) },
+            duration = 1000,
+            position = 300,
             onNewProgress = { },
             sliderColor = Color.White,
             backgroundColor = Grey,

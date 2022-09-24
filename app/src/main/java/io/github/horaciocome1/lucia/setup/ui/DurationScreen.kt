@@ -1,5 +1,8 @@
 package io.github.horaciocome1.lucia.setup.ui
 
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +15,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,6 +35,7 @@ import io.github.horaciocome1.lucia.ui.component.Seekbar
 import io.github.horaciocome1.lucia.ui.theme.BrightGreen
 import io.github.horaciocome1.lucia.ui.theme.Grey
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
+import kotlin.math.roundToLong
 
 @Destination
 @Composable
@@ -43,8 +46,32 @@ fun DurationScreen(
     position: Long = 90L
 ) {
     val seekbarMaximum = remember { mutableStateOf(maximumDuration - minimumDuration) }
-    val seekbarPosition = remember { mutableStateOf(position - minimumDuration) }
+    val seekbarPosition = remember { mutableStateOf(0L) }
     val contentWidth = 300.dp
+    LaunchedEffect(Unit) {
+        animate(
+            initialValue = 0f,
+            targetValue = (maximumDuration - minimumDuration).toFloat(),
+            animationSpec = tween(durationMillis = 400)
+        ) { value, _ ->
+            seekbarPosition.value = value.roundToLong()
+        }
+        animate(
+            initialValue = (maximumDuration - minimumDuration).toFloat(),
+            targetValue = (position - minimumDuration).toFloat(),
+            animationSpec = tween(durationMillis = 600)
+        ) { value, _ ->
+            seekbarPosition.value = value.roundToLong()
+        }
+    }
+    val dragging = remember { mutableStateOf(false) }
+    val animatedDurationFontWeight = animateIntAsState(
+        targetValue = if (dragging.value) {
+            FontWeight.Black.weight
+        } else {
+            FontWeight.Normal.weight
+        }
+    )
     SetupScaffold(
         title = "Pick duration",
         actionButtonText = "continue",
@@ -63,7 +90,7 @@ fun DurationScreen(
                     append((seekbarPosition.value + minimumDuration).toString())
                     append("\n")
                     withStyle(
-                        MaterialTheme.typography.displaySmall.toSpanStyle().copy(
+                        MaterialTheme.typography.headlineSmall.toSpanStyle().copy(
                             fontWeight = FontWeight.ExtraLight
                         )
                     ) {
@@ -71,15 +98,19 @@ fun DurationScreen(
                     }
                 },
                 style = MaterialTheme.typography.displayLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight(animatedDurationFontWeight.value)
             )
             Spacer(modifier = Modifier.widthIn(contentWidth))
             RegionSeekBar(
-                max = seekbarMaximum,
-                currentProgress = seekbarPosition,
+                max = seekbarMaximum.value,
+                currentProgress = seekbarPosition.value,
                 labelMinimum = minimumDuration.toString(),
                 labelMaximum = maximumDuration.toString(),
-                width = contentWidth
+                width = contentWidth,
+                onNewProgress = { seekbarPosition.value = it },
+                onDragStart = { dragging.value = true },
+                onDragEnd = { dragging.value = false }
             )
         }
     }
@@ -87,10 +118,13 @@ fun DurationScreen(
 
 @Composable
 fun RegionSeekBar(
-    max: State<Long>,
-    currentProgress: MutableState<Long>,
+    max: Long,
+    currentProgress: Long,
     labelMinimum: String,
     labelMaximum: String,
+    onNewProgress: (progress: Long) -> Unit,
+    onDragStart: (progress: Long) -> Unit = {},
+    onDragEnd: (progress: Long) -> Unit,
     width: Dp = 300.dp
 ) {
     Column(modifier = Modifier.width(width)) {
@@ -98,7 +132,9 @@ fun RegionSeekBar(
             modifier = Modifier,
             duration = max,
             position = currentProgress,
-            onNewProgress = { currentProgress.value = it },
+            onNewProgress = onNewProgress,
+            onDragStart = onDragStart,
+            onDragEnd = onDragEnd,
             sliderColor = Color.White,
             backgroundColor = Grey,
             progressColor = BrightGreen,
@@ -139,10 +175,13 @@ fun DurationScreenPreview() {
 fun RegionSeekBarPreview() {
     LuciaTheme {
         RegionSeekBar(
-            max = remember { mutableStateOf(150L) },
-            currentProgress = remember { mutableStateOf(30L) },
+            max = 150L,
+            currentProgress = 30L,
             labelMinimum = "60",
-            labelMaximum = "240"
+            labelMaximum = "240",
+            onNewProgress = { },
+            onDragStart = {},
+            onDragEnd = {}
         )
     }
 }

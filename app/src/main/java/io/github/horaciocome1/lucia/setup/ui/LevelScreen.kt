@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import io.github.horaciocome1.lucia.ui.theme.Green80
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import io.github.horaciocome1.lucia.ui.theme.Yellow70
 import io.github.horaciocome1.lucia.ui.theme.Yellow80
+import kotlinx.coroutines.delay
 
 @Destination
 @Composable
@@ -32,11 +34,29 @@ fun LevelScreen(
     navigator: DestinationsNavigator?
 ) {
     val selectedLevel = remember { mutableStateOf<Level?>(null) }
+    val runningInitialAnimation = remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        runningInitialAnimation.value = true
+        val interval = 300L
+        levels.forEach { level ->
+            delay(interval)
+            selectedLevel.value = level
+        }
+        delay(interval)
+        selectedLevel.value = null
+        levels.reversed().forEach { level ->
+            delay(interval)
+            selectedLevel.value = level
+        }
+        delay(interval)
+        selectedLevel.value = null
+        runningInitialAnimation.value = false
+    }
     SetupScaffold(
         title = "Choose level",
         actionButtonText = "Continue",
         firstStep = false,
-        stepComplete = selectedLevel.value != null,
+        stepComplete = selectedLevel.value != null && !runningInitialAnimation.value,
         onNavigateUpClick = { navigator?.navigateUp() },
         onContinueButtonClick = {
             val selected = selectedLevel.value

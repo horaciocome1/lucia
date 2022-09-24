@@ -1,5 +1,10 @@
 package io.github.horaciocome1.lucia.home
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
@@ -40,6 +46,18 @@ fun HomeScreen(
         append("\n")
         append(userName)
     }
+    val infiniteTransition = rememberInfiniteTransition()
+    val buttonWidth by infiniteTransition.animateFloat(
+        initialValue = 180f,
+        targetValue = 200f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 500
+                195f at 400
+            },
+            repeatMode = RepeatMode.Reverse
+        )
+    )
     Surface {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -54,8 +72,8 @@ fun HomeScreen(
             Button(
                 onClick = { navigator?.navigate(DurationScreenDestination()) },
                 modifier = Modifier
-                    .widthIn(200.dp)
-                    .heightIn(100.dp),
+                    .widthIn(buttonWidth.dp)
+                    .heightIn((buttonWidth / 2).dp),
                 shape = CircleShape
             ) {
                 Text(

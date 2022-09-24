@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Shuffle
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import io.github.horaciocome1.lucia.ui.component.RadioBox
 import io.github.horaciocome1.lucia.ui.theme.Brown70
 import io.github.horaciocome1.lucia.ui.theme.Brown80
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
+import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 @Destination
@@ -42,12 +44,33 @@ fun TopicsScreen(
     level: Level
 ) {
     val topics = remember { mutableStateOf(topics.map { it to false }) }
+    val runningInitialAnimation = remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        runningInitialAnimation.value = true
+        topics.value.toMutableList().let { mutableTopics ->
+            delay(300)
+            for (index in mutableTopics.indices) {
+                val (topic, _) = mutableTopics[index]
+                mutableTopics[index] = topic to true
+            }
+            topics.value = mutableTopics
+        }
+        topics.value.toMutableList().let { mutableTopics ->
+            delay(700)
+            for (index in mutableTopics.indices) {
+                val (topic, _) = mutableTopics[index]
+                mutableTopics[index] = topic to false
+            }
+            topics.value = mutableTopics
+        }
+        runningInitialAnimation.value = false
+    }
     SetupScaffold(
         modifier = Modifier.fillMaxSize(),
         title = "Select topics",
         firstStep = false,
         actionButtonText = "Continue",
-        stepComplete = topics.value.any { (_, selected) -> selected },
+        stepComplete = topics.value.any { (_, selected) -> selected } && !runningInitialAnimation.value,
         onNavigateUpClick = { navigator?.navigateUp() },
         onContinueButtonClick = { navigator?.navigate(InviteScreenDestination()) }
     ) {
