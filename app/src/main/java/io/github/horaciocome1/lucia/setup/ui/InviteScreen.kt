@@ -39,7 +39,13 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.horaciocome1.lucia.destinations.HomeScreenDestination
+import io.github.horaciocome1.lucia.destinations.QuestionsScreenDestination
+import io.github.horaciocome1.lucia.setup.model.Level
 import io.github.horaciocome1.lucia.setup.model.Player
+import io.github.horaciocome1.lucia.setup.model.PlayersWrapper
+import io.github.horaciocome1.lucia.setup.model.TopicsWrapper
+import io.github.horaciocome1.lucia.ui.theme.Brown70
+import io.github.horaciocome1.lucia.ui.theme.Brown80
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import java.text.DateFormat
 import java.util.Calendar
@@ -49,22 +55,20 @@ import java.util.Calendar
 @Composable
 fun InviteScreen(
     navigator: DestinationsNavigator?,
-    maxPlayers: Int = 5
+    maxPlayers: Int = 5,
+    duration: Long,
+    level: Level,
+    topics: TopicsWrapper
 ) {
     val players = remember { mutableStateOf(players) }
-    val dateFormatter = DateFormat.getDateTimeInstance()
+    val dateFormatter = remember { DateFormat.getDateTimeInstance() }
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            navigator?.popBackStack(
-                                route = HomeScreenDestination.route,
-                                inclusive = false
-                            )
-                        }
+                        onClick = { navigator?.navigateUp() }
                     ) {
                         Image(
                             imageVector = if (players.value.isEmpty()) {
@@ -121,7 +125,19 @@ fun InviteScreen(
                 }
             } else {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        navigator?.navigate(
+                            direction = QuestionsScreenDestination(
+                                duration = duration,
+                                level = level,
+                                topics = topics,
+                                players = PlayersWrapper(players.value)
+                            ),
+                            builder = {
+                                popUpTo(route = HomeScreenDestination.route)
+                            }
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(80.dp),
@@ -195,33 +211,42 @@ fun InviteScreen(
 @Composable
 fun PreviewInviteScreen() {
     LuciaTheme {
-        InviteScreen(navigator = null)
+        InviteScreen(
+            navigator = null,
+            level = Level(
+                name = "Madoda",
+                color = Brown70.value,
+                colorSelected = Brown80.value
+            ),
+            topics = TopicsWrapper(topics = emptyList()),
+            duration = 90
+        )
     }
 }
 
 private val players = listOf(
     Player(
-        id = "",
+        id = "a",
         name = "Mike",
         joinedAt = Calendar.getInstance().timeInMillis - 100000999999
     ),
     Player(
-        id = "",
+        id = "b",
         name = "Juliet",
         joinedAt = Calendar.getInstance().timeInMillis
     ),
     Player(
-        id = "",
+        id = "c",
         name = "Jordan",
         joinedAt = Calendar.getInstance().timeInMillis - 999999999999
     ),
     Player(
-        id = "",
+        id = "d",
         name = "Muchanga",
         joinedAt = Calendar.getInstance().timeInMillis - 11111999999
     )
 //    Player(
-//        id = "",
+//        id = "e",
 //        name = "Juliet",
 //        joinedAt = Calendar.getInstance().timeInMillis
 //    )

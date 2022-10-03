@@ -27,9 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.horaciocome1.lucia.destinations.HomeScreenDestination
 import io.github.horaciocome1.lucia.destinations.InviteScreenDestination
 import io.github.horaciocome1.lucia.setup.model.Level
 import io.github.horaciocome1.lucia.setup.model.Topic
+import io.github.horaciocome1.lucia.setup.model.TopicsWrapper
 import io.github.horaciocome1.lucia.ui.component.RadioBox
 import io.github.horaciocome1.lucia.ui.theme.Brown70
 import io.github.horaciocome1.lucia.ui.theme.Brown80
@@ -41,6 +43,7 @@ import kotlin.random.Random
 @Composable
 fun TopicsScreen(
     navigator: DestinationsNavigator?,
+    duration: Long,
     level: Level
 ) {
     val topics = remember { mutableStateOf(topics.map { it to false }) }
@@ -72,7 +75,20 @@ fun TopicsScreen(
         actionButtonText = "Continue",
         stepComplete = topics.value.any { (_, selected) -> selected } && !runningInitialAnimation.value,
         onNavigateUpClick = { navigator?.navigateUp() },
-        onContinueButtonClick = { navigator?.navigate(InviteScreenDestination()) }
+        onContinueButtonClick = {
+            navigator?.navigate(
+                direction = InviteScreenDestination(
+                    level = level,
+                    duration = duration,
+                    topics = TopicsWrapper(
+                        topics = topics.value.filter { it.second }.map { it.first }
+                    )
+                ),
+                builder = {
+                    popUpTo(route = HomeScreenDestination.route)
+                }
+            )
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -139,7 +155,8 @@ fun PreviewTopicsScreen() {
                 name = "Madoda",
                 color = Brown70.value,
                 colorSelected = Brown80.value
-            )
+            ),
+            duration = 90
         )
     }
 }

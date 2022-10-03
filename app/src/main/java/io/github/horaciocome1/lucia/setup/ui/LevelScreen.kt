@@ -31,7 +31,8 @@ import kotlinx.coroutines.delay
 @Destination
 @Composable
 fun LevelScreen(
-    navigator: DestinationsNavigator?
+    navigator: DestinationsNavigator?,
+    duration: Long
 ) {
     val selectedLevel = remember { mutableStateOf<Level?>(null) }
     val runningInitialAnimation = remember { mutableStateOf(false) }
@@ -61,7 +62,12 @@ fun LevelScreen(
         onContinueButtonClick = {
             val selected = selectedLevel.value
             if (selected != null) {
-                navigator?.navigate(TopicsScreenDestination(level = selected))
+                navigator?.navigate(
+                    direction = TopicsScreenDestination(
+                        level = selected,
+                        duration = duration
+                    )
+                )
             }
         }
     ) {
@@ -90,7 +96,10 @@ fun LevelScreen(
 @Composable
 fun PreviewLevelScreen() {
     LuciaTheme {
-        LevelScreen(navigator = null)
+        LevelScreen(
+            navigator = null,
+            duration = 90L
+        )
     }
 }
 

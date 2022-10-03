@@ -78,7 +78,13 @@ fun DurationScreen(
         firstStep = true,
         stepComplete = true,
         onNavigateUpClick = { navigator?.navigateUp() },
-        onContinueButtonClick = { navigator?.navigate(LevelScreenDestination()) }
+        onContinueButtonClick = {
+            navigator?.navigate(
+                direction = LevelScreenDestination(
+                    duration = seekbarPosition.value + minimumDuration
+                )
+            )
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
