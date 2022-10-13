@@ -27,12 +27,15 @@ android {
                 "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnY2hudGl3d3ZucWlvamlmeWdmIiwicm9sZ" +
                 "SI6ImFub24iLCJpYXQiOjE2NjA4MzE3MzYsImV4cCI6MTk3NjQwNzczNn0.tg_MAB4Jc3" +
                 "HB8QopCAcITKWYfDPGvexPhM694eYBOgw\""
+
+        resValue "string", "app_name", "Lucia"
     }
 
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
             debuggable true
+            resValue "string", "app_name", "Lucia Debug"
         }
         release {
             minifyEnabled true
