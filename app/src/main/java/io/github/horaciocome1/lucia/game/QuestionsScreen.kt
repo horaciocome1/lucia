@@ -135,8 +135,8 @@ fun QuestionsScreen(
             count = questions.value.size,
             state = pagerState,
             contentPadding = paddingValues
-        ) {
-            val (question, selectedOption) = questions.value[pagerState.currentPage]
+        ) { index ->
+            val (question, selectedOption) = questions.value[index]
             QuestionItem(
                 color = Color(level.color),
                 colorSelected = Color(level.colorSelected),
@@ -144,7 +144,7 @@ fun QuestionsScreen(
                 selectedOption = selectedOption,
                 onOptionSelected = { option ->
                     val updatedQuestions = questions.value.toMutableList().apply {
-                        set(pagerState.currentPage, question to option)
+                        set(index, question to option)
                     }
                     questions.value = updatedQuestions
                 }
@@ -176,7 +176,7 @@ fun PreviewQuestionsScreen() {
 
 private val questions = listOf(
     Question(
-        title = "Quantos dias a mais tem ano bisexto?",
+        title = "Quantos dias a mais tem um ano bisexto?",
         options = listOf(
             Option(
                 title = "1 dias",
