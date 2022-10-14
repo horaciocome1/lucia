@@ -77,7 +77,7 @@ class TopicsViewModel @Inject constructor(
             } else {
                 selectedTopics.remove(topic)
             }
-            currentState.copy(selectedTopics = currentState.selectedTopics)
+            currentState.copy(selectedTopics = selectedTopics)
         }
     }
 
