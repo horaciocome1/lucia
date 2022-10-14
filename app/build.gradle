@@ -15,7 +15,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,13 +35,36 @@ android {
         debug {
             applicationIdSuffix ".debug"
             debuggable true
-            resValue "string", "app_name", "Lucia Debug"
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        play {
+            dimension "version"
+        }
+        management {
+            dimension "version"
+            applicationIdSuffix ".management"
+            versionNameSuffix "-management"
+            resValue "string", "app_name", "Lucia Management"
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.name == "playDebug") {
+            variant.resValue "string", "app_name", "Lucia PD"
+        } else if (variant.name == "managementDebug") {
+            variant.resValue "string", "app_name", "Lucia MD"
+        } else if (variant.name == "managementRelease") {
+            variant.resValue "string", "app_name", "Lucia M"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
