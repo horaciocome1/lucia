@@ -10,6 +10,7 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import io.github.horaciocome1.lucia.api.LuciaApi
 import io.github.horaciocome1.lucia.api.LuciaInterceptor
+import io.github.horaciocome1.lucia.api.ManagementApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,7 +26,7 @@ class LuciaModule {
             .add(KotlinJsonAdapterFactory())
             .build()
         val logging = HttpLoggingInterceptor()
-            .setLevel(if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE)
+            .setLevel(if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
         val okHttp = OkHttpClient.Builder()
             .addInterceptor(LuciaInterceptor())
             .addInterceptor(logging)
@@ -39,4 +40,7 @@ class LuciaModule {
 
     @Provides
     fun provideLuciaApi(retrofit: Retrofit): LuciaApi = retrofit.create(LuciaApi::class.java)
+
+    @Provides
+    fun provideManagementApi(retrofit: Retrofit): ManagementApi = retrofit.create(ManagementApi::class.java)
 }

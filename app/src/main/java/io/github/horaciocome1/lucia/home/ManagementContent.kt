@@ -21,6 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.horaciocome1.lucia.destinations.ManageScreenDestination
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @Composable
@@ -47,7 +48,7 @@ fun ManagementContent(
             )
             Spacer(modifier = Modifier.height(60.dp))
             Button(
-                onClick = { },
+                onClick = { navigator?.navigate(ManageScreenDestination()) },
                 modifier = Modifier
                     .widthIn(200.dp)
                     .heightIn(100.dp),

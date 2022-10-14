@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface LuciaApi {
 
-    @GET("/rest/v1/topic?select=id,description")
+    @GET("/rest/v1/topic?select=id,description,created_by_employee_id")
     suspend fun getTopics(): Response<List<Topic>>
 }

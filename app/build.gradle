@@ -29,6 +29,7 @@ android {
                 "HB8QopCAcITKWYfDPGvexPhM694eYBOgw\""
 
         resValue "string", "app_name", "Lucia"
+        buildConfigField "String", "EMPLOYEE_ID", "\"uuid\""
     }
 
     buildTypes {
@@ -60,6 +61,7 @@ android {
             variant.resValue "string", "app_name", "Lucia PD"
         } else if (variant.name == "managementDebug") {
             variant.resValue "string", "app_name", "Lucia MD"
+            buildConfigField "String", "EMPLOYEE_ID", "\"3f8f4461-445b-4cce-9448-1daf828c867b\""
         } else if (variant.name == "managementRelease") {
             variant.resValue "string", "app_name", "Lucia M"
         }

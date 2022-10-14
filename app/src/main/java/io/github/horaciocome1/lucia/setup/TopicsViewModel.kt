@@ -55,7 +55,7 @@ class TopicsViewModel @Inject constructor(
                     currentState.copy(
                         loading = false,
                         retrieveSuccess = true,
-                        topics = response.body()?.sortedBy { it.name } ?: emptyList()
+                        topics = response.body()?.sortedBy { it.name.lowercase() } ?: emptyList()
                     )
                 } else {
                     currentState.copy(
