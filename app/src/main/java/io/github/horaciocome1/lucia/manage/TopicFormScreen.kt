@@ -42,10 +42,10 @@ import io.github.horaciocome1.lucia.ui.theme.RedLight
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun EditTopicScreen(
+fun TopicFormScreen(
     navigator: DestinationsNavigator?,
     topic: Topic?,
-    viewModel: EditTopicViewModel = hiltViewModel()
+    viewModel: TopicFormViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState()
     val id = rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -98,91 +98,107 @@ fun EditTopicScreen(
             }
         }
     ) { paddingValues ->
-        Box(
-            modifier = Modifier.padding(paddingValues)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            when (true) {
-                state.value.loading -> {
+
+        when (true) {
+            state.value.loading -> {
+                Box(
+                    modifier = Modifier.padding(paddingValues)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator(modifier = Modifier.size(32.dp))
                 }
-                state.value.createTopicError -> {
+            }
+            state.value.createTopicError -> {
+                Box(
+                    modifier = Modifier.padding(paddingValues)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
                         modifier = Modifier.padding(32.dp),
                         text = state.value.errorMessage.ifBlank {
-                            "Some error occurred while adding your topic" +
-                                " Please try again later"
+                            "Some error occurred while adding your topic" + " Please try again later"
                         },
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Light)
                     )
                 }
-                state.value.updateTopicError -> {
+            }
+            state.value.updateTopicError -> {
+                Box(
+                    modifier = Modifier.padding(paddingValues)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
                         modifier = Modifier.padding(32.dp),
                         text = state.value.errorMessage.ifBlank {
-                            "Some error occurred while saving your changes" +
-                                " Please try again later"
+                            "Some error occurred while saving your changes" + " Please try again later"
                         },
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Light)
                     )
                 }
-                state.value.deleteTopicError -> {
+            }
+            state.value.deleteTopicError -> {
+                Box(
+                    modifier = Modifier.padding(paddingValues)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
                         modifier = Modifier.padding(32.dp),
                         text = state.value.errorMessage.ifBlank {
-                            "Some error occurred while deleting your topic" +
-                                " Please try again later"
+                            "Some error occurred while deleting your topic" + " Please try again later"
                         },
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Light)
                     )
                 }
-                state.value.createTopicSuccess,
-                state.value.updateTopicSuccess,
-                state.value.deleteTopicSuccess -> {
-                    navigator?.navigateUp()
-                }
-                else -> {
-                    Column(
-                        modifier = Modifier.padding(paddingValues)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        TextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp, vertical = 16.dp),
-                            value = id.value,
-                            onValueChange = { id.value = it },
-                            label = { Text("Id") },
-                            enabled = topic != null,
-                            readOnly = true
-                        )
-                        TextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
-                            value = title.value,
-                            onValueChange = { title.value = it },
-                            label = { Text("Title") }
-                        )
-                        if (topic != null) {
-                            Button(
-                                modifier = Modifier.padding(32.dp),
-                                onClick = { viewModel.deleteTopic(topic.id) },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = RedLight
-                                ),
-                                enabled = !state.value.loading
-                            ) {
-                                Text(
-                                    text = "Delete",
-                                    style = MaterialTheme.typography.bodyMedium.copy(
-                                        color = Color.Red,
-                                        fontWeight = FontWeight.Bold
-                                    )
+            }
+            state.value.createTopicSuccess,
+            state.value.updateTopicSuccess,
+            state.value.deleteTopicSuccess -> {
+                navigator?.navigateUp()
+            }
+            else -> {
+                Column(
+                    modifier = Modifier.padding(paddingValues)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 16.dp),
+                        value = id.value,
+                        onValueChange = { id.value = it },
+                        label = { Text("Id") },
+                        enabled = topic != null,
+                        readOnly = true
+                    )
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        value = title.value,
+                        onValueChange = { title.value = it },
+                        label = { Text("Title") }
+                    )
+                    if (topic != null) {
+                        Button(
+                            modifier = Modifier.padding(32.dp),
+                            onClick = { viewModel.deleteTopic(topic.id) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = RedLight
+                            ),
+                            enabled = !state.value.loading
+                        ) {
+                            Text(
+                                text = "Delete",
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = Color.Red,
+                                    fontWeight = FontWeight.Bold
                                 )
-                            }
+                            )
                         }
                     }
                 }
@@ -193,9 +209,9 @@ fun EditTopicScreen(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewEditTopicScreen() {
+fun PreviewTopicFormScreen() {
     LuciaTheme {
-        EditTopicScreen(
+        TopicFormScreen(
             navigator = null,
             topic = null
         )

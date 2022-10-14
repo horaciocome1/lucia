@@ -17,7 +17,7 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
-class EditTopicViewModel @Inject constructor(
+class TopicFormViewModel @Inject constructor(
     private val managementApi: ManagementApi
 ) : ViewModel() {
 
