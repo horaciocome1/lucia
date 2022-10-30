@@ -1,4 +1,4 @@
-package io.github.horaciocome1.lucia.manage
+package io.github.horaciocome1.lucia.manage.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -34,7 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
+import io.github.horaciocome1.lucia.manage.TopicFormViewModel
 import io.github.horaciocome1.lucia.setup.model.Topic
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import io.github.horaciocome1.lucia.ui.theme.RedLight
@@ -43,7 +44,7 @@ import io.github.horaciocome1.lucia.ui.theme.RedLight
 @Destination
 @Composable
 fun TopicFormScreen(
-    navigator: DestinationsNavigator?,
+    navigator: ResultBackNavigator<Boolean>?,
     topic: Topic?,
     viewModel: TopicFormViewModel = hiltViewModel()
 ) {
@@ -65,7 +66,7 @@ fun TopicFormScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator?.navigateUp() }
+                        onClick = { navigator?.navigateBack(result = false) }
                     ) {
                         Image(
                             imageVector = Icons.Outlined.Close,
@@ -100,6 +101,11 @@ fun TopicFormScreen(
     ) { paddingValues ->
 
         when (true) {
+            state.value.createTopicSuccess,
+            state.value.updateTopicSuccess,
+            state.value.deleteTopicSuccess -> {
+                navigator?.navigateBack(result = true)
+            }
             state.value.loading -> {
                 Box(
                     modifier = Modifier.padding(paddingValues)
@@ -153,11 +159,6 @@ fun TopicFormScreen(
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Light)
                     )
                 }
-            }
-            state.value.createTopicSuccess,
-            state.value.updateTopicSuccess,
-            state.value.deleteTopicSuccess -> {
-                navigator?.navigateUp()
             }
             else -> {
                 Column(

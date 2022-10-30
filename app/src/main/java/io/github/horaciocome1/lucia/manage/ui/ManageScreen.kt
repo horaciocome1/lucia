@@ -1,4 +1,4 @@
-package io.github.horaciocome1.lucia.manage
+package io.github.horaciocome1.lucia.manage.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package io.github.horaciocome1.lucia.manage
+package io.github.horaciocome1.lucia.manage.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import io.github.horaciocome1.lucia.destinations.EditTopicScreenDestination
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
+import io.github.horaciocome1.lucia.destinations.TopicFormScreenDestination
 import io.github.horaciocome1.lucia.setup.TopicsViewModel
 import io.github.horaciocome1.lucia.ui.component.ListItem
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
@@ -41,9 +43,16 @@ import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 @Composable
 fun ManageTopicsScreen(
     navigator: DestinationsNavigator?,
+    resultRecipient: ResultRecipient<TopicFormScreenDestination, Boolean>?,
     viewModel: TopicsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState()
+    resultRecipient?.onNavResult { navResult ->
+        when (navResult) {
+            NavResult.Canceled -> Unit
+            is NavResult.Value -> viewModel.retrieveTopics()
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -102,7 +111,7 @@ fun ManageTopicsScreen(
                                 text = "New",
                                 icon = Icons.Outlined.Add,
                                 onClick = {
-                                    navigator?.navigate(EditTopicScreenDestination(topic = null))
+                                    navigator?.navigate(TopicFormScreenDestination(topic = null))
                                 }
                             )
                         }
@@ -112,7 +121,7 @@ fun ManageTopicsScreen(
                                 text = topic.name,
                                 icon = Icons.Outlined.Edit,
                                 onClick = {
-                                    navigator?.navigate(EditTopicScreenDestination(topic = topic))
+                                    navigator?.navigate(TopicFormScreenDestination(topic = topic))
                                 }
                             )
                         }
@@ -128,7 +137,8 @@ fun ManageTopicsScreen(
 fun PreviewManageTopicsScreen() {
     LuciaTheme {
         ManageTopicsScreen(
-            navigator = null
+            navigator = null,
+            resultRecipient = null
         )
     }
 }

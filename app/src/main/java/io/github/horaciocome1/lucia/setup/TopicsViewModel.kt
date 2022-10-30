@@ -29,7 +29,7 @@ class TopicsViewModel @Inject constructor(
         retrieveTopics()
     }
 
-    private fun retrieveTopics() {
+    fun retrieveTopics() {
         Log.v("SetupViewModel", "retrieveTopics")
         viewModelScope.launch {
             _state.update { it.copy(loading = true) }

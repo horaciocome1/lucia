@@ -52,7 +52,6 @@ android {
             dimension "version"
             applicationIdSuffix ".management"
             versionNameSuffix "-management"
-            resValue "string", "app_name", "Lucia Management"
         }
     }
 
@@ -98,12 +97,12 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation "androidx.compose.ui:ui:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.0.0-rc01'
+    implementation 'androidx.compose.material3:material3:1.1.0-alpha01'
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.6.0'
+    implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "com.google.accompanist:accompanist-pager:0.26.4-beta"
     implementation "io.github.raamcosta.compose-destinations:core:$compose_destinations_version"

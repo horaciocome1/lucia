@@ -14,9 +14,12 @@ interface ManagementApi {
     @POST("/rest/v1/topic")
     suspend fun createTopic(@Body topic: Topic.Add): Response<Unit>
 
-    @Headers("Content-Type: application/json")
+    @Headers(
+        "Content-Type: application/json",
+        "Prefer: resolution=merge-duplicates"
+    )
     @POST("/rest/v1/topic")
-    suspend fun updateTopic(@Query("id") queryValueTopicId: String, @Body topic: Topic.Edit): Response<Unit>
+    suspend fun updateTopic(@Body topic: Topic.Edit): Response<Unit>
 
     @DELETE("/rest/v1/topic")
     suspend fun deleteTopic(@Query("id") queryValueTopicId: String): Response<Unit>

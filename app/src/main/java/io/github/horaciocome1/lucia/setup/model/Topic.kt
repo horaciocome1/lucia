@@ -22,6 +22,8 @@ data class Topic(
     )
 
     data class Edit(
+        @Json(name = "id")
+        val id: String,
         @Json(name = "description")
         val name: String,
         @Json(name = "created_by_employee_id")

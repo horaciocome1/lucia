@@ -50,7 +50,7 @@ class TopicFormViewModel @Inject constructor(
             _state.update { currentState ->
                 if (response.isSuccessful) {
                     currentState.copy(
-                        loading = false,
+                        // loading = false,
                         createTopicSuccess = true
                     )
                 } else {
@@ -71,8 +71,8 @@ class TopicFormViewModel @Inject constructor(
             try {
                 response = withContext(Dispatchers.IO) {
                     managementApi.updateTopic(
-                        queryValueTopicId = "eq.${topic.id}",
                         topic = Topic.Edit(
+                            id = topic.id,
                             name = topic.name,
                             createdBy = topic.createdBy,
                             reviewedBy = BuildConfig.EMPLOYEE_ID
@@ -92,7 +92,7 @@ class TopicFormViewModel @Inject constructor(
             _state.update { currentState ->
                 if (response.isSuccessful) {
                     currentState.copy(
-                        loading = false,
+                        // loading = false,
                         updateTopicSuccess = true
                     )
                 } else {
@@ -129,7 +129,7 @@ class TopicFormViewModel @Inject constructor(
             _state.update { currentState ->
                 if (response.isSuccessful) {
                     currentState.copy(
-                        loading = false,
+                        // loading = false,
                         deleteTopicSuccess = true
                     )
                 } else {
