@@ -15,9 +15,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
-private val DarkColorScheme = darkColorScheme(primary = Pink, secondary = Pink, tertiary = Pink)
+private val DarkColorScheme = darkColorScheme(
+    primary = Pink,
+    secondary = Pink,
+    tertiary = Indigo500
+)
 
-private val LightColorScheme = lightColorScheme(primary = Pink, secondary = Pink, tertiary = Pink)
+private val LightColorScheme = lightColorScheme(
+    primary = Pink,
+    secondary = Pink,
+    tertiary = Indigo500
+)
 
 @Composable
 fun LuciaTheme(
