@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import io.github.horaciocome1.lucia.destinations.TopicFormScreenDestination
 import io.github.horaciocome1.lucia.setup.TopicsViewModel
 import io.github.horaciocome1.lucia.ui.component.ListItem
+import io.github.horaciocome1.lucia.ui.theme.Grey
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,19 +58,15 @@ fun ManageTopicsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "Configure topics",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
+                title = {},
                 navigationIcon = {
                     IconButton(
                         onClick = { navigator?.navigateUp() }
                     ) {
                         Image(
                             imageVector = Icons.Outlined.ArrowBackIosNew,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            colorFilter = ColorFilter.tint(Grey)
                         )
                     }
                 }

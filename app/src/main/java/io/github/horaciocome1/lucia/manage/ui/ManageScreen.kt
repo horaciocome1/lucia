@@ -24,12 +24,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.horaciocome1.lucia.destinations.ManageTopicsScreenDestination
 import io.github.horaciocome1.lucia.ui.component.ListItem
+import io.github.horaciocome1.lucia.ui.theme.Grey
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +50,8 @@ fun ManageScreen(
                     ) {
                         Image(
                             imageVector = Icons.Outlined.ArrowBackIosNew,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            colorFilter = ColorFilter.tint(Grey)
                         )
                     }
                 }
@@ -65,7 +68,8 @@ fun ManageScreen(
                     .widthIn(300.dp)
                     .padding(top = 32.dp, start = 32.dp, end = 32.dp),
                 text = "Configure",
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineLarge,
+                color = Grey
             )
             Box(
                 modifier = Modifier.fillMaxSize(),

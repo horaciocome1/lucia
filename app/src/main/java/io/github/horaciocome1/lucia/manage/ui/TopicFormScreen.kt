@@ -1,15 +1,17 @@
 package io.github.horaciocome1.lucia.manage.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,7 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,8 +39,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import io.github.horaciocome1.lucia.manage.TopicFormViewModel
 import io.github.horaciocome1.lucia.setup.model.Topic
+import io.github.horaciocome1.lucia.ui.theme.GreenDark
+import io.github.horaciocome1.lucia.ui.theme.Grey
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
-import io.github.horaciocome1.lucia.ui.theme.RedLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -58,48 +61,21 @@ fun TopicFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "Topic",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
+                title = {},
                 navigationIcon = {
                     IconButton(
                         onClick = { navigator?.navigateBack(result = false) }
                     ) {
                         Image(
                             imageVector = Icons.Outlined.Close,
-                            contentDescription = "Close"
+                            contentDescription = "Close",
+                            colorFilter = ColorFilter.tint(Grey)
                         )
                     }
                 }
             )
-        },
-        bottomBar = {
-            Button(
-                onClick = {
-                    if (topic != null) {
-                        viewModel.updateTopic(topic.copy(name = title.value.text))
-                    } else {
-                        viewModel.createTopic(Topic("", title.value.text))
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(80.dp),
-                shape = RectangleShape,
-                enabled = title.value.text.isNotBlank() && !state.value.loading
-            ) {
-                Text(
-                    text = if (topic != null) "Save changes" else "Add",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.ExtraBold
-                )
-            }
         }
     ) { paddingValues ->
-
         when (true) {
             state.value.createTopicSuccess,
             state.value.updateTopicSuccess,
@@ -163,8 +139,7 @@ fun TopicFormScreen(
             else -> {
                 Column(
                     modifier = Modifier.padding(paddingValues)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.End
+                        .fillMaxWidth()
                 ) {
                     TextField(
                         modifier = Modifier
@@ -184,19 +159,46 @@ fun TopicFormScreen(
                         onValueChange = { title.value = it },
                         label = { Text("Title") }
                     )
-                    if (topic != null) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = if (topic != null) {
+                            Arrangement.SpaceBetween
+                        } else {
+                            Arrangement.End
+                        }
+                    ) {
+                        if (topic != null) {
+                            IconButton(
+                                modifier = Modifier.padding(32.dp),
+                                onClick = { viewModel.deleteTopic(topic.id) },
+                                enabled = !state.value.loading
+                            ) {
+                                Image(
+                                    imageVector = Icons.Outlined.DeleteOutline,
+                                    colorFilter = ColorFilter.tint(Color.Red),
+                                    contentDescription = "Delete"
+                                )
+                            }
+                        }
                         Button(
                             modifier = Modifier.padding(32.dp),
-                            onClick = { viewModel.deleteTopic(topic.id) },
+                            onClick = {
+                                if (topic != null) {
+                                    viewModel.updateTopic(topic.copy(name = title.value.text))
+                                } else {
+                                    viewModel.createTopic(Topic("", title.value.text))
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = RedLight
+                                containerColor = GreenDark.copy(alpha = 0.1f)
                             ),
-                            enabled = !state.value.loading
+                            enabled = title.value.text.isNotBlank() && !state.value.loading
                         ) {
                             Text(
-                                text = "Delete",
+                                text = if (topic != null) "Save changes" else "Add",
                                 style = MaterialTheme.typography.bodyMedium.copy(
-                                    color = Color.Red,
+                                    color = GreenDark.copy(alpha = 0.75f),
                                     fontWeight = FontWeight.Bold
                                 )
                             )
