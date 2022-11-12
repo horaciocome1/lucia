@@ -1,6 +1,5 @@
 package io.github.horaciocome1.lucia.manage.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.DeleteOutline
@@ -16,12 +16,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +33,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +43,7 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 import io.github.horaciocome1.lucia.manage.TopicFormViewModel
 import io.github.horaciocome1.lucia.setup.model.Topic
 import io.github.horaciocome1.lucia.ui.theme.GreenDark
-import io.github.horaciocome1.lucia.ui.theme.Grey
+import io.github.horaciocome1.lucia.ui.theme.Indigo500
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,13 +66,17 @@ fun TopicFormScreen(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navigator?.navigateBack(result = false) }
+                    FilledIconButton(
+                        onClick = { navigator?.navigateBack(result = false) },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Indigo500,
+                            contentColor = contentColorFor(backgroundColor = Indigo500)
+                        )
                     ) {
-                        Image(
+                        Icon(
                             imageVector = Icons.Outlined.Close,
-                            contentDescription = "Close",
-                            colorFilter = ColorFilter.tint(Grey)
+                            contentDescription = "Close"
                         )
                     }
                 }
@@ -169,14 +176,17 @@ fun TopicFormScreen(
                         }
                     ) {
                         if (topic != null) {
-                            IconButton(
+                            FilledTonalIconButton(
                                 modifier = Modifier.padding(32.dp),
                                 onClick = { viewModel.deleteTopic(topic.id) },
-                                enabled = !state.value.loading
+                                enabled = !state.value.loading,
+                                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                    containerColor = Color.Red.copy(alpha = 0.1f),
+                                    contentColor = Color.Red
+                                )
                             ) {
-                                Image(
+                                Icon(
                                     imageVector = Icons.Outlined.DeleteOutline,
-                                    colorFilter = ColorFilter.tint(Color.Red),
                                     contentDescription = "Delete"
                                 )
                             }
@@ -191,14 +201,19 @@ fun TopicFormScreen(
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = GreenDark.copy(alpha = 0.1f)
+                                containerColor = GreenDark.copy(alpha = 0.1f),
+                                contentColor = GreenDark.copy(alpha = 0.75f)
                             ),
-                            enabled = title.value.text.isNotBlank() && !state.value.loading
+                            enabled = when (false) {
+                                !state.value.loading,
+                                title.value.text.isNotBlank(),
+                                (title.value.text != topic?.name) -> false
+                                else -> true
+                            }
                         ) {
                             Text(
                                 text = if (topic != null) "Save changes" else "Add",
                                 style = MaterialTheme.typography.bodyMedium.copy(
-                                    color = GreenDark.copy(alpha = 0.75f),
                                     fontWeight = FontWeight.Bold
                                 )
                             )

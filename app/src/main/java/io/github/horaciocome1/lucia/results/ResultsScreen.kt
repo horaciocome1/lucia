@@ -11,16 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +43,7 @@ import io.github.horaciocome1.lucia.results.model.Result
 import io.github.horaciocome1.lucia.results.model.ResultsWrapper
 import io.github.horaciocome1.lucia.setup.model.Player
 import io.github.horaciocome1.lucia.setup.model.PlayersWrapper
+import io.github.horaciocome1.lucia.ui.theme.Indigo500
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import java.util.Calendar
 
@@ -62,10 +67,15 @@ fun ResultsScreen(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navigator?.navigateUp() }
+                    FilledIconButton(
+                        onClick = { navigator?.navigateUp() },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Indigo500,
+                            contentColor = contentColorFor(backgroundColor = Indigo500)
+                        )
                     ) {
-                        Image(
+                        Icon(
                             imageVector = Icons.Outlined.Close,
                             contentDescription = "Close"
                         )

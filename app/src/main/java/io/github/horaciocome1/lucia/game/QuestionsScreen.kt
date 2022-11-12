@@ -1,19 +1,22 @@
 package io.github.horaciocome1.lucia.game
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +45,7 @@ import io.github.horaciocome1.lucia.ui.component.CircularProgressBar
 import io.github.horaciocome1.lucia.ui.component.DotProgressBar
 import io.github.horaciocome1.lucia.ui.theme.Brown70
 import io.github.horaciocome1.lucia.ui.theme.Brown80
+import io.github.horaciocome1.lucia.ui.theme.Indigo500
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
@@ -87,10 +91,15 @@ fun QuestionsScreen(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navigator?.navigateUp() }
+                    FilledIconButton(
+                        onClick = { navigator?.navigateUp() },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Indigo500,
+                            contentColor = contentColorFor(backgroundColor = Indigo500)
+                        )
                     ) {
-                        Image(
+                        Icon(
                             imageVector = Icons.Outlined.Close,
                             contentDescription = "Close"
                         )

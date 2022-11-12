@@ -1,6 +1,5 @@
 package io.github.horaciocome1.lucia.manage.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,20 +10,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
@@ -32,6 +34,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.horaciocome1.lucia.destinations.ManageTopicsScreenDestination
 import io.github.horaciocome1.lucia.ui.component.ListItem
 import io.github.horaciocome1.lucia.ui.theme.Grey
+import io.github.horaciocome1.lucia.ui.theme.Indigo500
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,13 +48,17 @@ fun ManageScreen(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navigator?.navigateUp() }
+                    FilledIconButton(
+                        onClick = { navigator?.navigateUp() },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Indigo500,
+                            contentColor = contentColorFor(backgroundColor = Indigo500)
+                        )
                     ) {
-                        Image(
+                        Icon(
                             imageVector = Icons.Outlined.ArrowBackIosNew,
-                            contentDescription = "Back",
-                            colorFilter = ColorFilter.tint(Grey)
+                            contentDescription = "Back"
                         )
                     }
                 }

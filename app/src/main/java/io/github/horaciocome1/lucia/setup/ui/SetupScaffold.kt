@@ -1,6 +1,5 @@
 package io.github.horaciocome1.lucia.setup.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -9,16 +8,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +30,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.github.horaciocome1.lucia.ui.theme.Indigo500
 import io.github.horaciocome1.lucia.ui.theme.LuciaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +55,20 @@ fun SetupScaffold(
                         IconButton(
                             onClick = onNavigateUpClick
                         ) {
-                            Image(
+                            Icon(
+                                imageVector = Icons.Outlined.ArrowBackIosNew,
+                                contentDescription = "Back"
+                            )
+                        }
+                        FilledIconButton(
+                            onClick = onNavigateUpClick,
+                            shape = RoundedCornerShape(8.dp),
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = Indigo500,
+                                contentColor = contentColorFor(backgroundColor = Indigo500)
+                            )
+                        ) {
+                            Icon(
                                 imageVector = Icons.Outlined.ArrowBackIosNew,
                                 contentDescription = "Back"
                             )
@@ -62,7 +80,7 @@ fun SetupScaffold(
                         IconButton(
                             onClick = onNavigateUpClick
                         ) {
-                            Image(
+                            Icon(
                                 imageVector = Icons.Outlined.Close,
                                 contentDescription = "Close"
                             )
